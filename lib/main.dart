@@ -186,8 +186,11 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                           },
                     child: const Text("Select Image"),
                   ),
-            const SizedBox(height: 20), // Add spacing between the buttons
-            FloatingActionButton(
+          ],
+        ),
+      ),
+      floatingActionButton: !loading
+          ? FloatingActionButton(
               onPressed: () {
                 // Navigate to settings page
                 Navigator.push(
@@ -201,10 +204,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                 Icons.settings,
                 color: Colors.white,
               ),
-            ),
-          ],
-        ),
-      ),
+            )
+          : null, // Set to null to hide the button
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
