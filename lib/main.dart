@@ -81,12 +81,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         final File inputPath = inputPaths[i];
         final Uint8List bytes = await inputPath.readAsBytes();
         final ui.Image image = await decodeImageFromList(bytes);
-        String newPath =
-            "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll(".heic", ".jpg")}";
-        Uint8List heicBytes = await inputPath.readAsBytes();
 
         CompressFormat format = CompressFormat.jpeg;
-
         switch (ref.read(settingsManagerProvider).selectedFormat) {
           case 'jpeg':
             format = CompressFormat.jpeg;
@@ -102,6 +98,9 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             break;
           default:
         }
+        String newPath =
+            "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll(".heic", ".${format.toString()}")}";
+        Uint8List heicBytes = await inputPath.readAsBytes();
 
         Uint8List jpgBytes = await FlutterImageCompress.compressWithList(
           heicBytes,
@@ -177,25 +176,24 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           children: <Widget>[
             loading
                 ? const CircularProgressIndicator()
-                : loading
-                    ? const SizedBox()
-                    : ElevatedButton(
-                        onPressed: loading
-                            ? null
-                            : () async {
-                                path = await _get_file_path();
-                                convertHeicToPng(path, pathProvider());
-                                setState(() {});
-                              },
-                        child: const Text("Select Image"),
-                      ),
+                : ElevatedButton(
+                    onPressed: loading
+                        ? null
+                        : () async {
+                            path = await _get_file_path();
+                            convertHeicToPng(path, pathProvider());
+                            setState(() {});
+                          },
+                    child: const Text("Select Image"),
+                  ),
+            const SizedBox(height: 20), // Add spacing between the buttons
             FloatingActionButton(
               onPressed: () {
-                // navigate to settings page
+                // Navigate to settings page
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => Settings(),
+                    builder: (context) => const Settings(),
                   ),
                 );
               },

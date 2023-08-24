@@ -7,8 +7,8 @@ final settingsManagerProvider =
 
 class SettingsManager extends ChangeNotifier {
   SettingsManager() {
-    loadSettings();
-    notifyListeners();
+    loadSettings().then((value) => notifyListeners());
+    
   }
 
   void updateSettings() {
