@@ -5,14 +5,18 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:heif/settings.dart';
+import 'package:heif/settingsManager.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'dart:ui' as ui;
-import 'package:flutter_ffmpeg/flutter_ffmpeg.dart';
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
+
+
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 eatItSnackBar(context, String message) {
@@ -56,57 +60,17 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyHomePage extends StatefulWidget {
+class MyHomePage extends ConsumerStatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
 List<File>? path;
 
-class _MyHomePageState extends State<MyHomePage> {
+class _MyHomePageState extends ConsumerState<MyHomePage> {
   bool loading = false;
-
-  Future<void> convertMovToMp4(
-      List<File>? inputPaths, String outputPath) async {
-    setState(() {
-      loading = true;
-    });
-    try {
-      for (var i = 0; i < inputPaths!.length; i++) {
-        final File inputPath = inputPaths[i];
-    
-        String newPath = 
-            "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll(".mov", ".mp4")}";
-
-        // String newPath ="$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll(".MO", ".jpg")}";
-        // code goes here
-
-        final FlutterFFmpeg _flutterFFmpeg = FlutterFFmpeg();
-        final arguments = [
-          '-i',
-          inputPath.path, // Use inputPath.path to get the file path
-          '-c:v',
-          'libx264',
-          '-c:a',
-          'aac',
-          newPath,
-        ];
-
-        await _flutterFFmpeg.executeWithArguments(arguments);
-        // code ends here
-        eatItSnackBar(context, "Successful Done");
-        MediaScanner.loadMedia(path: outputPath.toString());
-      }
-    } catch (e) {
-      eatItSnackBar(context, "Successful Failed $e");
-      print(e);
-    }
-    setState(() {
-      loading = false;
-    });
-  }
 
   Future<void> convertHeicToPng(
       List<File>? inputPaths, String outputPath) async {
@@ -121,17 +85,42 @@ class _MyHomePageState extends State<MyHomePage> {
         String newPath =
             "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll(".heic", ".jpg")}";
         Uint8List heicBytes = await inputPath.readAsBytes();
+
+          CompressFormat format = CompressFormat.jpeg;
+
+          switch (ref.read(SettingsManagerProvider).selectedFormat) {
+            case 'jpeg':
+              format = CompressFormat.jpeg;
+              break;
+            case 'png':
+              format = CompressFormat.png;
+              break;
+            case 'heic':
+              format = CompressFormat.heic;
+              break;
+            case 'webp':
+              format = CompressFormat.webp;
+              break;
+            default:
+          }
+
+
         Uint8List jpgBytes = await FlutterImageCompress.compressWithList(
           heicBytes,
           minHeight: image.height,
           minWidth: image.width,
           inSampleSize: 0,
-          quality: 100,
-          rotate: 0,
-          autoCorrectionAngle: false,
-          format: CompressFormat.jpeg,
-          keepExif: true,
+          quality: ref.read(SettingsManagerProvider).quality.toInt(),
+          rotate: ref.read(SettingsManagerProvider).rotateAngle.toInt(),
+          autoCorrectionAngle: ref.read(SettingsManagerProvider).autoCorrectionAngle,
+          format: format,
+          keepExif: ref.read(SettingsManagerProvider).keepExif,
         );
+
+
+
+
+
         File jpgFile = File(newPath);
         await jpgFile.writeAsBytes(jpgBytes);
         eatItSnackBar(context, "Successful Done");
@@ -200,11 +189,29 @@ class _MyHomePageState extends State<MyHomePage> {
                             ? null
                             : () async {
                                 path = await _get_file_path();
-                                convertMovToMp4(path, pathProvider());
+                                convertHeicToPng(path, pathProvider());
                                 setState(() {});
                               },
                         child: const Text("Select Image"),
                       ),
+            FloatingActionButton(
+              onPressed: () {
+
+                // navigate to settings page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Settings(),
+                  ),
+                );
+
+
+              },
+              child: const Icon(
+                Icons.settings,
+                color: Colors.white,
+              ),
+            ),
           ],
         ),
       ),
