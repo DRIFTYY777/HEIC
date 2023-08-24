@@ -40,6 +40,7 @@ dependencies:
   media_scanner: ^2.1.0
   shared_preferences: ^2.0.8 
   hooks_riverpod: ^2.3.8
+  flutter_hooks: ^0.20.0
 
   
 dev_dependencies:

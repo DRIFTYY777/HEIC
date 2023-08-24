@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final SettingsManagerProvider =
+final settingsManagerProvider =
     ChangeNotifierProvider<SettingsManager>((ref) => SettingsManager());
 
 class SettingsManager extends ChangeNotifier {
   SettingsManager() {
     loadSettings();
+    notifyListeners();
   }
 
   void updateSettings() {

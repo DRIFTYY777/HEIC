@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:heif/settingsManager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -8,6 +9,14 @@ class Settings extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, ref) {
     final settings = ref.watch(settingsManagerProvider);
+
+
+    useEffect(() {
+      settings.loadSettings();
+      return null;
+    }, []);
+
+
 
     return Scaffold(
       appBar: AppBar(
