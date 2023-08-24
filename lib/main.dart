@@ -14,7 +14,6 @@ import 'dart:ui' as ui;
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
 
-
 void main() {
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -86,40 +85,36 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll(".heic", ".jpg")}";
         Uint8List heicBytes = await inputPath.readAsBytes();
 
-          CompressFormat format = CompressFormat.jpeg;
+        CompressFormat format = CompressFormat.jpeg;
 
-          switch (ref.read(SettingsManagerProvider).selectedFormat) {
-            case 'jpeg':
-              format = CompressFormat.jpeg;
-              break;
-            case 'png':
-              format = CompressFormat.png;
-              break;
-            case 'heic':
-              format = CompressFormat.heic;
-              break;
-            case 'webp':
-              format = CompressFormat.webp;
-              break;
-            default:
-          }
-
+        switch (ref.read(settingsManagerProvider).selectedFormat) {
+          case 'jpeg':
+            format = CompressFormat.jpeg;
+            break;
+          case 'png':
+            format = CompressFormat.png;
+            break;
+          case 'heic':
+            format = CompressFormat.heic;
+            break;
+          case 'webp':
+            format = CompressFormat.webp;
+            break;
+          default:
+        }
 
         Uint8List jpgBytes = await FlutterImageCompress.compressWithList(
           heicBytes,
           minHeight: image.height,
           minWidth: image.width,
           inSampleSize: 0,
-          quality: ref.read(SettingsManagerProvider).quality.toInt(),
-          rotate: ref.read(SettingsManagerProvider).rotateAngle.toInt(),
-          autoCorrectionAngle: ref.read(SettingsManagerProvider).autoCorrectionAngle,
+          quality: ref.read(settingsManagerProvider).quality.toInt(),
+          rotate: ref.read(settingsManagerProvider).rotateAngle.toInt(),
+          autoCorrectionAngle:
+              ref.read(settingsManagerProvider).autoCorrectionAngle,
           format: format,
-          keepExif: ref.read(SettingsManagerProvider).keepExif,
+          keepExif: ref.read(settingsManagerProvider).keepExif,
         );
-
-
-
-
 
         File jpgFile = File(newPath);
         await jpgFile.writeAsBytes(jpgBytes);
@@ -196,7 +191,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                       ),
             FloatingActionButton(
               onPressed: () {
-
                 // navigate to settings page
                 Navigator.push(
                   context,
@@ -204,8 +198,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                     builder: (context) => Settings(),
                   ),
                 );
-
-
               },
               child: const Icon(
                 Icons.settings,

@@ -3,9 +3,11 @@ import 'package:heif/settingsManager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class Settings extends HookConsumerWidget {
+  const Settings({super.key});
+
   @override
   Widget build(BuildContext context, ref) {
-    final settings = ref.watch(SettingsManagerProvider);
+    final settings = ref.watch(settingsManagerProvider);
 
     return Scaffold(
       appBar: AppBar(
