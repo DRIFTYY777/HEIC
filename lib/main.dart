@@ -50,13 +50,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'HEIC Converter',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         useMaterial3: true,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
       debugShowCheckedModeBanner: false,
+      home: const MyHomePage(title: 'HEIC Converter'),
     );
   }
 }
@@ -115,7 +115,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
 
         File jpgFile = File(newPath.replaceAll("CompressFormat.", ""));
         await jpgFile.writeAsBytes(jpgBytes);
-        eatItSnackBar(context, "Successful Done");
+        eatItSnackBar(context, "Successful Done!, Saved in Gallery");
         MediaScanner.loadMedia(path: outputPath.toString());
       }
     } catch (e) {
@@ -172,6 +172,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
@@ -205,7 +206,6 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               },
               child: const Icon(
                 Icons.settings,
-                color: Color.fromARGB(255, 0, 0, 0),
               ),
             )
           : null, // Set to null to hide the button
