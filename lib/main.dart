@@ -10,6 +10,7 @@ import 'package:heif/settingsManager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'dart:ui' as ui;
+import 'package:path_provider/path_provider.dart';
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -55,6 +56,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -83,23 +85,19 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         final ui.Image image = await decodeImageFromList(bytes);
 
         CompressFormat format = CompressFormat.jpeg;
-        switch (ref.read(settingsManagerProvider).selectedFormat) {
-          case 'jpeg':
-            format = CompressFormat.jpeg;
-            break;
-          case 'png':
-            format = CompressFormat.png;
-            break;
-          case 'heic':
-            format = CompressFormat.heic;
-            break;
-          case 'webp':
-            format = CompressFormat.webp;
-            break;
-          default:
+        String selectedFormat =
+            ref.read(settingsManagerProvider).selectedFormat;
+        if (selectedFormat == 'jpeg') {
+          format = CompressFormat.jpeg;
+        } else if (selectedFormat == 'png') {
+          format = CompressFormat.png;
+        } else if (selectedFormat == 'heic') {
+          format = CompressFormat.heic;
+        } else if (selectedFormat == 'webp') {
+          format = CompressFormat.webp;
         }
         String newPath =
-            "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll(".heic", ".${format.toString()}")}";
+            "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll("heic", format.toString())}";
         Uint8List heicBytes = await inputPath.readAsBytes();
 
         Uint8List jpgBytes = await FlutterImageCompress.compressWithList(
@@ -115,13 +113,13 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
           keepExif: ref.read(settingsManagerProvider).keepExif,
         );
 
-        File jpgFile = File(newPath);
+        File jpgFile = File(newPath.replaceAll("CompressFormat.", ""));
         await jpgFile.writeAsBytes(jpgBytes);
         eatItSnackBar(context, "Successful Done");
         MediaScanner.loadMedia(path: outputPath.toString());
       }
     } catch (e) {
-      eatItSnackBar(context, "Successful Failed $e");
+      eatItSnackBar(context, "Failed $e");
       print(e);
     }
     setState(() {
@@ -140,14 +138,19 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     }
   }
 
-  String pathProvider() {
+  String pathProvider(){
+
     var saving_path;
+    String downloadsDir = getDownloadsDirectory().toString();
     var camera = '/storage/emulated/0/DCIM/Camera';
     var screenShot = '/storage/emulated/0/DCIM/Screenshots';
     var pictures = '/storage/emulated/0/Pictures';
     var download = '/storage/emulated/0/Download';
 
-    if (Directory(camera).existsSync()) {
+    if (Directory(downloadsDir).existsSync()) {
+      return downloadsDir;
+    }
+    else if (Directory(camera).existsSync()) {
       saving_path = camera;
     } else if (Directory(screenShot).existsSync()) {
       saving_path = screenShot;
@@ -202,7 +205,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
               },
               child: const Icon(
                 Icons.settings,
-                color: Colors.white,
+                color: Color.fromARGB(255, 0, 0, 0),
               ),
             )
           : null, // Set to null to hide the button
