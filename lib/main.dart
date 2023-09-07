@@ -10,7 +10,7 @@ import 'package:heif/settingsManager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'dart:ui' as ui;
-import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -138,32 +138,36 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     }
   }
 
-  String pathProvider(){
-
+  Future<String?> pathProvider() async {
     var saving_path;
-    String downloadsDir = getDownloadsDirectory().toString();
+    var status = await Permission.storage.status;
     var camera = '/storage/emulated/0/DCIM/Camera';
-    var screenShot = '/storage/emulated/0/DCIM/Screenshots';
-    var pictures = '/storage/emulated/0/Pictures';
-    var download = '/storage/emulated/0/Download';
-
-    if (Directory(downloadsDir).existsSync()) {
-      return downloadsDir;
-    }
-    else if (Directory(camera).existsSync()) {
-      saving_path = camera;
-    } else if (Directory(screenShot).existsSync()) {
-      saving_path = screenShot;
-    } else if (Directory(pictures).existsSync()) {
-      saving_path = pictures;
-    } else if (Directory(download).existsSync()) {
-      saving_path = download;
-    } else if (Directory(download).existsSync()) {
-      saving_path = download;
+        var screenShot = '/storage/emulated/0/DCIM/Screenshots';
+        var pictures = '/storage/emulated/0/Pictures';
+        var download = '/storage/emulated/0/Download';
+    if (status.isGranted) {
+      var result = await Permission.storage.request();
+      if (result.isGranted) {
+        // Permission granted, continue with your logic.
+        if (Directory(camera).existsSync()) {
+          saving_path = camera;
+        } else if (Directory(screenShot).existsSync()) {
+          saving_path = screenShot;
+        } else if (Directory(pictures).existsSync()) {
+          saving_path = pictures;
+        } else if (Directory(download).existsSync()) {
+          saving_path = download;
+        } else {
+          saving_path = '/storage/emulated/0';
+        }
+        return saving_path;
+      } else {
+        // Handle the case where permission is denied.
+        throw Exception("Storage permission denied");
+      }
     } else {
-      saving_path = '/storage/emulated/0';
+      return null;
     }
-    return saving_path;
   }
 
   @override
@@ -185,7 +189,8 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                         ? null
                         : () async {
                             path = await _get_file_path();
-                            convertHeicToPng(path, pathProvider());
+                            var saving_path = await pathProvider();
+                            convertHeicToPng(path, saving_path!);
                             setState(() {});
                           },
                     child: const Text("Select Image"),
