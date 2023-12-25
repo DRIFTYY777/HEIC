@@ -10,7 +10,6 @@ import 'package:heif/settingsManager.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:media_scanner/media_scanner.dart';
 import 'dart:ui' as ui;
-import 'package:permission_handler/permission_handler.dart';
 
 final GlobalKey<ScaffoldMessengerState> snackbarKey =
     GlobalKey<ScaffoldMessengerState>();
@@ -68,9 +67,8 @@ class MyHomePage extends ConsumerStatefulWidget {
   ConsumerState<MyHomePage> createState() => _MyHomePageState();
 }
 
-List<File>? path;
-
 class _MyHomePageState extends ConsumerState<MyHomePage> {
+  List<File>? path;
   bool loading = false;
 
   Future<void> convertHeicToPng(
@@ -96,37 +94,47 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
         } else if (selectedFormat == 'webp') {
           format = CompressFormat.webp;
         }
+
         String newPath =
-            "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll("heic", format.toString())}";
+            "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll("heic", format.toString()).replaceAll('.CompressFormat', '')}";
+
         Uint8List heicBytes = await inputPath.readAsBytes();
-
+ 
         Uint8List jpgBytes = await FlutterImageCompress.compressWithList(
-          heicBytes,
-          minHeight: image.height,
-          minWidth: image.width,
-          inSampleSize: 0,
-          quality: ref.read(settingsManagerProvider).quality.toInt(),
-          rotate: ref.read(settingsManagerProvider).rotateAngle.toInt(),
-          autoCorrectionAngle:
-              ref.read(settingsManagerProvider).autoCorrectionAngle,
-          format: format,
-          keepExif: ref.read(settingsManagerProvider).keepExif,
-        );
+            heicBytes,
+            minHeight: image.height,
+            minWidth: image.width,
+            inSampleSize: 0,
+            quality: ref.read(settingsManagerProvider).quality.toInt(),
+            rotate: ref.read(settingsManagerProvider).rotateAngle.toInt(),
+            autoCorrectionAngle:
+                ref.read(settingsManagerProvider).autoCorrectionAngle,
+            format: format,
+            keepExif: ref.read(settingsManagerProvider).keepExif);
+        debugPrint("New path: $newPath");
 
-        File jpgFile = File(newPath.replaceAll("CompressFormat.", ""));
-        await jpgFile.writeAsBytes(jpgBytes);
+        File jpgFile;
+        try {
+          jpgFile = File(newPath);
+          await jpgFile.writeAsBytes(jpgBytes);
+        } catch (e) {
+          eatItSnackBar(context, "Faileddddd $e");
+          debugPrint(e.toString());
+        }
+
         eatItSnackBar(context, "Successful Done!, Saved in Gallery");
-        MediaScanner.loadMedia(path: outputPath.toString());
+        MediaScanner.loadMedia(path: newPath.toString()); // could be error
       }
     } catch (e) {
       eatItSnackBar(context, "Failed $e");
-      print(e);
+      debugPrint(e.toString());
     }
     setState(() {
       loading = false;
     });
   }
 
+  // ignore: non_constant_identifier_names
   Future<List<File>?> _get_file_path() async {
     FilePickerResult? result = await FilePicker.platform
         .pickFiles(allowMultiple: true, withData: true, withReadStream: true);
@@ -138,36 +146,24 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
     }
   }
 
-  Future<String?> pathProvider() async {
-    var saving_path;
-    var status = await Permission.storage.status;
+  String pathProvider() {
+    String savingPath;
     var camera = '/storage/emulated/0/DCIM/Camera';
-        var screenShot = '/storage/emulated/0/DCIM/Screenshots';
-        var pictures = '/storage/emulated/0/Pictures';
-        var download = '/storage/emulated/0/Download';
-    if (status.isGranted) {
-      var result = await Permission.storage.request();
-      if (result.isGranted) {
-        // Permission granted, continue with your logic.
-        if (Directory(camera).existsSync()) {
-          saving_path = camera;
-        } else if (Directory(screenShot).existsSync()) {
-          saving_path = screenShot;
-        } else if (Directory(pictures).existsSync()) {
-          saving_path = pictures;
-        } else if (Directory(download).existsSync()) {
-          saving_path = download;
-        } else {
-          saving_path = '/storage/emulated/0';
-        }
-        return saving_path;
-      } else {
-        // Handle the case where permission is denied.
-        throw Exception("Storage permission denied");
-      }
+    var screenShot = '/storage/emulated/0/DCIM/Screenshots';
+    var pictures = '/storage/emulated/0/Pictures';
+    var download = '/storage/emulated/0/Download';
+    if (Directory(camera).existsSync()) {
+      savingPath = camera;
+    } else if (Directory(screenShot).existsSync()) {
+      savingPath = screenShot;
+    } else if (Directory(pictures).existsSync()) {
+      savingPath = pictures;
+    } else if (Directory(download).existsSync()) {
+      savingPath = download;
     } else {
-      return null;
+      savingPath = '/storage/emulated/0';
     }
+    return savingPath;
   }
 
   @override
@@ -189,8 +185,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
                         ? null
                         : () async {
                             path = await _get_file_path();
-                            var saving_path = await pathProvider();
-                            convertHeicToPng(path, saving_path!);
+                            convertHeicToPng(path, pathProvider());
                             setState(() {});
                           },
                     child: const Text("Select Image"),
