@@ -99,7 +99,7 @@ class _MyHomePageState extends ConsumerState<MyHomePage> {
             "$outputPath/${inputPath.path.toLowerCase().split("/").last.replaceAll("heic", format.toString()).replaceAll('.CompressFormat', '')}";
 
         Uint8List heicBytes = await inputPath.readAsBytes();
- 
+
         Uint8List jpgBytes = await FlutterImageCompress.compressWithList(
             heicBytes,
             minHeight: image.height,
