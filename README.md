@@ -68,10 +68,10 @@ Converting HEIC images to lossy formats (JPG, WEBP) may result in some quality l
 This code is released under the [License Name](Link to License) license. You are free to use, modify, and distribute the code under the terms of the license.
 
 ## App UI photos 
-![Screenshot_20240508-193052](https://github.com/R3MadLabs/HEIC/assets/93861763/8a08b539-90c0-409f-a3f2-24b40430c90f)
-![Screenshot_20240508-193140](https://github.com/R3MadLabs/HEIC/assets/93861763/5dda9c4a-9b32-40a6-9eee-4c3de17f3759)
-![Screenshot_20240508-193018](https://github.com/R3MadLabs/HEIC/assets/93861763/fcd64733-93dc-4827-958c-a3e1065d04ff)
 ![Screenshot_20240508-193402](https://github.com/R3MadLabs/HEIC/assets/93861763/89283b25-e49d-425f-ac43-7fe2abae808e)
+![Screenshot_20240508-193018](https://github.com/R3MadLabs/HEIC/assets/93861763/fcd64733-93dc-4827-958c-a3e1065d04ff)
+![Screenshot_20240508-193140](https://github.com/R3MadLabs/HEIC/assets/93861763/5dda9c4a-9b32-40a6-9eee-4c3de17f3759)
+![Screenshot_20240508-193052](https://github.com/R3MadLabs/HEIC/assets/93861763/8a08b539-90c0-409f-a3f2-24b40430c90f)
 
 ## Converted photo in three different format 
 ![img_8734 jpeg](https://github.com/R3MadLabs/HEIC/assets/93861763/1e28df8f-9ae6-4b78-a38b-015cbe3cf880)
