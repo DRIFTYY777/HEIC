@@ -1,14 +1,18 @@
-# HEIC Converter - Flutter App for iPhone Photo Conversion
+# HEIC Converter - Feature-Rich App for iPhone Photo Conversion
 
-This Flutter application allows you to convert HEIC images (iPhone photos) to PNG, JPG, and WEBP formats, offering a range of customization options and remembering user preferences for a seamless experience.
+This feature-rich Flutter application allows you to effortlessly convert HEIC images (iPhone photos) to widely-supported formats like PNG, JPG, and WEBP, offering a range of customization options, remembering user preferences, and supporting automatic image size handling, multi-photo conversion, auto-correction for rotation, and metadata preservation.
 
 ## Key Features
 
-HEIC Conversion: Converts HEIC images captured on iPhones to widely-supported formats like PNG, JPG, and WEBP.
-Quality Settings: Adjust the output image quality for each format (PNG is lossless, JPG and WEBP offer quality control).
-Image Rotation: Rotate images before conversion to correct for incorrect orientation.
-Bulk Conversion: Convert multiple images simultaneously for efficient processing.
-Persistent Settings: Remembers your last-used conversion format and quality preferences for future use.
+HEIC Conversion: Convert HEIC images to PNG, JPG, and WEBP formats.
+Quality Settings: Adjust output image quality for JPG and WEBP (PNG is lossless).
+Image Rotation:
+Auto-Correction: Automatically detect and correct image orientation.
+Manual Rotation Buttons: Rotate images manually if needed.
+Bulk Conversion: Convert up to two HEIC images simultaneously for efficiency.
+Persistent Settings: Remembers your last-used conversion format, quality settings, and height/width preferences.
+Automatic Height/Width: Choose "Auto" for height and width, and the app will calculate appropriate dimensions based on the original image.
+Metadata Preservation: Keep EXIF data (metadata) embedded within the converted images (if available in the original HEIC).
 Android Only: This application is currently built for Android devices.
 ## Getting Started
 
@@ -38,23 +42,24 @@ Run flutter run to build and deploy the app to your device.
 
 1. Select Images
 
-Use the app's interface to select HEIC images from your device's gallery. You can choose individual images or select multiple images for bulk conversion.
+Use the app's interface to select HEIC images from your device's gallery. You can choose up to two images for simultaneous conversion.
 2. Choose Format
 
 Select the desired output format from the available options (PNG, JPG, WEBP).
 3. Adjust Settings
 
 For JPG and WEBP formats, adjust the quality slider to control the output file size and visual quality.
-Optionally, rotate the image if necessary using the provided rotation buttons.
+Optionally, disable auto-correction if you want to manually rotate images.
+Choose "Auto" for height and width, or enter specific dimensions if needed.
 4. Convert Images
 
 Tap the "Convert" button to begin the conversion process.
 5. Access Converted Images
 
-The app will save the converted images to a designated location on your device, typically in a folder named "HEICConverter" or similar.
+The app will save the converted images to a designated location on your device, typically in a folder named "HEICConverter" or similar, preserving the metadata (if available).
 ## Preferences and Settings
 
-The app remembers your last-used conversion format and quality settings, making conversions more streamlined. You can always adjust these settings before each conversion.
+The app remembers your last-used conversion format, quality settings, height/width preferences (if not set to "Auto"), and auto-correction preference for future use. You can always adjust these settings before each conversion.
 ## Disclaimer
 
 Converting HEIC images to lossy formats (JPG, WEBP) may result in some quality loss depending on the chosen quality level. Experiment with the quality settings to find the right balance between file size and visual quality for your needs.
@@ -62,9 +67,9 @@ Converting HEIC images to lossy formats (JPG, WEBP) may result in some quality l
 
 This code is released under the [License Name](Link to License) license. You are free to use, modify, and distribute the code under the terms of the license.
 
-I hope this comprehensive README file empowers you to successfully utilize your HEIC Converter project!
-
 ## Additional Notes
 
-Consider adding a progress bar or status indicator for bulk conversions in future.
+Consider adding a progress bar or status indicator for bulk conversions.
 Explore implementing more advanced features like image resizing or compression options.
+Provide clear instructions within the app's interface to guide users through the conversion process.
+I hope this comprehensive README file empowers you to experience the ease and convenience of using your HEIC Converter app!
