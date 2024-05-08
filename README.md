@@ -67,14 +67,15 @@ Converting HEIC images to lossy formats (JPG, WEBP) may result in some quality l
 
 This code is released under the [License Name](Link to License) license. You are free to use, modify, and distribute the code under the terms of the license.
 
-# App UI Photos 
-![Upload Photo/Photos](Screenshot_20240508-193018.jpg)
-![Upload Photo/Photos](Screenshot_20240508-193052.jpg)
-![Upload Photo/Photos](Screenshot_20240508-193140.jpg)
-![Upload Photo/Photos](Screenshot_20240508-193402.jpg)
+## App UI photos 
+![Screenshot_20240508-193052](https://github.com/R3MadLabs/HEIC/assets/93861763/8a08b539-90c0-409f-a3f2-24b40430c90f)
+![Screenshot_20240508-193140](https://github.com/R3MadLabs/HEIC/assets/93861763/5dda9c4a-9b32-40a6-9eee-4c3de17f3759)
+![Screenshot_20240508-193018](https://github.com/R3MadLabs/HEIC/assets/93861763/fcd64733-93dc-4827-958c-a3e1065d04ff)
+![Screenshot_20240508-193402](https://github.com/R3MadLabs/HEIC/assets/93861763/89283b25-e49d-425f-ac43-7fe2abae808e)
 
-
-## Additional Notes
+## Converted photo in three different format 
+![img_8734 jpeg](https://github.com/R3MadLabs/HEIC/assets/93861763/1e28df8f-9ae6-4b78-a38b-015cbe3cf880)
+![img_1948](https://github.com/R3MadLabs/HEIC/assets/93861763/2637bd5b-b8f3-4309-8be7-8e10c5df809e)
 
 Consider adding a progress bar or status indicator for bulk conversions.
 Explore implementing more advanced features like image resizing or compression options.
