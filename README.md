@@ -23,8 +23,17 @@ Navigate to the project directory in your terminal.
 Run flutter pub get to install the required dependencies.
 ## Running the App
 
+- Download Pre-built Releases:
+
+You can download pre-built release versions of the app for your Android device:
+
+- **Release 1 (latest):** [Link to Release 1]
+- **Release 2 (optional, specify version details):** [Link to Release 2] (if applicable)
+Build and Run from Source:
+
 Connect your Android device to your computer or use an emulator.
 Run flutter run to build and deploy the app to your device.
+
 ## Using the App
 
 1. Select Images
@@ -49,10 +58,13 @@ The app remembers your last-used conversion format and quality settings, making 
 ## Disclaimer
 
 Converting HEIC images to lossy formats (JPG, WEBP) may result in some quality loss depending on the chosen quality level. Experiment with the quality settings to find the right balance between file size and visual quality for your needs.
+## License
+
+This code is released under the [License Name](Link to License) license. You are free to use, modify, and distribute the code under the terms of the license.
+
 I hope this comprehensive README file empowers you to successfully utilize your HEIC Converter project!
 
 ## Additional Notes
 
-Consider adding a progress bar or status indicator for bulk conversions.
+Consider adding a progress bar or status indicator for bulk conversions in future.
 Explore implementing more advanced features like image resizing or compression options.
-Provide clear instructions within the app's interface to guide users through the conversion process.
