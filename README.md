@@ -67,8 +67,12 @@ Converting HEIC images to lossy formats (JPG, WEBP) may result in some quality l
 
 This code is released under the [License Name](Link to License) license. You are free to use, modify, and distribute the code under the terms of the license.
 
-# App Photos
-![Photo1](https://github.com/R3MadLabs/HEIC/blob/main/Heic%20Photos/Screenshot_20240508-193018)
+# App UI Photos 
+![Upload Photo/Photos](Screenshot_20240508-193018.jpg)
+![Upload Photo/Photos](Screenshot_20240508-193052.jpg)
+![Upload Photo/Photos](Screenshot_20240508-193140.jpg)
+![Upload Photo/Photos](Screenshot_20240508-193402.jpg)
+
 
 ## Additional Notes
 
